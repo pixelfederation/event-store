@@ -95,7 +95,7 @@ class MergedStreamIteratorTest extends AbstractStreamIteratorTest
         }
     }
 
-    public function getStreamsLarge($numberOfEvents = 977): array
+    public static function getStreamsLarge($numberOfEvents = 977, bool $shuffleDate = true, bool $shuffleStreamEvents = true): array
     {
         $datetimeList = [];
         for ($i = 0; $i < $numberOfEvents; $i++) {
@@ -111,7 +111,9 @@ class MergedStreamIteratorTest extends AbstractStreamIteratorTest
         }
         unset($value);
 
-        \shuffle($datetimeList);
+        if ($shuffleDate === true) {
+            \shuffle($datetimeList);
+        }
 
         $length = (int) \floor($numberOfEvents / 3);
         $chunkThree = (int) \floor($length / 3) * 3;
@@ -121,7 +123,10 @@ class MergedStreamIteratorTest extends AbstractStreamIteratorTest
         $streamsOneEvents = \array_chunk(\array_slice($datetimeList, $length + $chunkThree), 1);
 
         $streamEvents = \array_merge($streamsOneEvents, $streamsTwoEvents, $streamsThreeEvents);
-        \shuffle($streamEvents);
+
+        if ($shuffleStreamEvents) {
+            \shuffle($streamEvents);
+        }
 
         $streams = [];
 
